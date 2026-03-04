@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct charact {
+    char ch;
+    int occurs;
+    struct charact *next;
+};
+
+typedef struct charact Char;
+typedef Char * ListofChar;
+typedef Char * CharNode_ptr;
+
+void letters(char name[50], ListofChar * chars_ptr);
+void report(ListofChar chars);
+Char * createnode(char ch);
+
+
+int main(void) {
+    char name[50];
+    ListofChar chars = NULL;
+    scanf("%49s", name);
+    letters(name, &chars);
+    report(chars);
+    return 0;
+}
+
+
+Char * createnode(char ch) {
+    CharNode_ptr newnode_ptr ;
+    newnode_ptr = malloc(sizeof (Char));
+    newnode_ptr -> ch = ch;
+    newnode_ptr -> occurs = 0;
+    newnode_ptr -> next = NULL;
+    return newnode_ptr;
+}
+
+
+void letters(char name[50], ListofChar * lst_ptr) {
+    /* add your code */
+    CharNode_ptr new_ptr;
+    new_ptr=calloc(49,sizeof(Char));
+    int len = strlen(name);
+    for(int i=0;i<len;i++){
+        new_ptr=createnode(name[i]);
+        if(new_ptr!=NULL){
+            for(int j=i+1;j<len;j++){
+                if(new_ptr->ch==name[j]){
+                    new_ptr->occurs=j-i;
+                    break;
+                }
+                else{
+                    new_ptr->occurs=0;
+                }
+            }
+        }
+        else{
+            printf("No memory available");
+        }
+        new_ptr->next=*lst_ptr;
+        *lst_ptr = new_ptr;
+    }
+    return;
+}
+
+
+void report(ListofChar chars) {
+    /* add your code */
+    CharNode_ptr current_ptr;
+    current_ptr=chars;
+    for(;current_ptr!=NULL;current_ptr=current_ptr->next){
+        printf("%c %d\n", current_ptr->ch, current_ptr->occurs);
+    }
+    return;
+}
