@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<string.h>
+#define N 30000
+#define M 20
+int get_choice(void);
+void input_text(char array[N][M]);
+void input_vocabulary(void);
+void text_correction(void);
+void save_text(void);
+void text_statistics(void);
+
+int main(void){
+    int input;
+    char words[N][M];
+    printf("0.input text\n1.input vocabulary\n2.text correction\n3.save text\n4.text statistics\n5.exit programm\n");
+    for(;(input=get_choice())!=5;){
+        switch(input){
+            case 0:
+            input_text(words);
+            break;
+            case 1:
+            input_vocabulary();
+            break;
+            case 2:
+            text_correction();
+            break;
+            case 3:
+            save_text();
+            break;
+            case 4:
+            text_statistics();
+            break;
+            default:
+            printf("You didn't enter a number!");
+        }
+        printf("\n\n0.input text\n1.input vocabulary\n2.text correction\n3.save text\n4.text statistics\n5.exit programm\n");
+    }
+return 0;
+}
+
+int get_choice(void){
+    int input;
+    printf("\nSelect a number:");
+    scanf("%d",&input);
+    return input;
+}
+
+void input_text(char array[N][M]){
+    int i=0;
+    char input[M];
+    while(scanf("\n%[^\n]",input), strcmp(input,"*T*E*L*O*S*")){
+        strcpy(array[i++],input);
+        if(i==N)break;
+    }
+}
+
+void input_vocabulary(void){
+    printf("input vocabulary");
+}
+
+void text_correction(void){
+    printf("text correction");
+}
+
+void save_text(void){
+    printf("save text");
+}
+
+void text_statistics(void){
+    printf("text statistics");
+}
