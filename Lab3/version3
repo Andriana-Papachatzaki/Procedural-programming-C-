@@ -1,0 +1,143 @@
+#include<stdio.h>
+#include<string.h>
+#define N 30000
+#define M 30
+int get_choice(void);
+void input_text(char array[N][M]);
+void input_vocabulary(void);
+void text_correction(void);
+void save_text(void);
+void text_statistics(char array[N][M]);
+
+int main(void){
+    int input;
+    char words[N][M];
+    printf("0.input text\n1.input vocabulary\n2.text correction\n3.save text\n4.text statistics\n5.exit programm\n");
+    for(;(input=get_choice())!=5;){
+        switch(input){
+            case 0:
+            input_text(words);
+            break;
+            case 1:
+            input_vocabulary();
+            break;
+            case 2:
+            text_correction();
+            break;
+            case 3:
+            save_text();
+            break;
+            case 4:
+            text_statistics(words);
+            break;
+            default:
+            printf("You didn't enter a number!");
+        }
+        printf("\n\n0.input text\n1.input vocabulary\n2.text correction\n3.save text\n4.text statistics\n5.exit programm\n");
+    }
+return 0;
+}
+
+int get_choice(void){
+    int input;
+    printf("\nSelect a number:");
+    scanf("%d",&input);
+    return input;
+}
+
+void input_text(char array[N][M]){
+    int c=0;
+    FILE *readfile;
+    char name[N];
+    char input[M];
+    printf("Give a .txt file:");
+    scanf("%s",name);
+    readfile = fopen(name,"r");
+    if(!readfile){
+        printf("\nError opening the file\n");
+        return;
+    }
+    while(fscanf(readfile,"%s",input)!=EOF){
+        strcpy(array[c++],input);
+        if(c<N){
+            for(int i=c;i<N;i++){
+                array[i][0]='\0';
+            }
+        }
+        if(c==N)break;
+    }fclose(readfile);
+}
+
+void input_vocabulary(void){
+    printf("input vocabulary");
+}
+
+void text_correction(void){
+    printf("text correction");
+}
+
+void save_text(void){
+    printf("save text");
+}
+
+void text_statistics(char array[N][M]){
+    int i,j=0;
+    int c=0;
+    int withoutspaces=0;
+    int withspaces=0;
+    for(i=0;i<N;i++){
+        if(array[i][0]!='\0'){
+            c++;
+        }
+    }printf("number of words:%d\n",c);
+    for(i=0;i<c;i++){
+        for(j=0;array[i][j]!='\0';j++){
+            withoutspaces++;
+            withspaces++;
+        }withspaces++;
+    }printf("Characters without spaces:%d\nCharacters with spaces:%d\n",withoutspaces,withspaces);
+    int different=0;
+    char state[N];
+    for(i=0;i<N;i++){
+        state[i]='0';
+    }
+    for(j = 0; j < c; j++){
+        if(state[j]=='0'){
+            for(i=j+1; i<c; i++){
+                int result=strcmp(array[j],array[i]);
+                if(result==0){
+                    state[i]='1';
+                }
+            }
+            different++;
+        }
+    }
+    printf("different words:%d",different);
+    int times[30+1]={0};
+    for(i=0;i<c;i++){
+        int len=strlen(array[i]);
+        for(j=0;j<=len;j++){
+            if(j==len){
+                times[j]++;
+            }
+        }
+    }
+    printf("\nnumber of characters\t total words\n");
+    for(i=0;i<30;i++){
+        printf("%d\t\t\t %d\n",i,times[i]);
+        }
+    char name[N];
+    printf("Give file name to save statistics(.txt):");
+    scanf("%s",name);
+    FILE * writefile;
+    writefile=fopen(name,"wt");
+    fprintf(writefile,"number of words:%d\n",c);
+    fprintf(writefile,"Characters without spaces:%d\nCharacters with spaces:%d\n",withoutspaces,withspaces);
+    fprintf(writefile,"different words:%d",different);
+    fprintf(writefile,"\nnumber of characters\t total words\n");
+    for(i=0;i<=M;i++){
+        fprintf(writefile,"%d\t\t\t\t\t\t %d\n",i,times[i]);
+        }
+        fclose(writefile);
+    printf("Statistics saved succesful");
+}
